@@ -56,8 +56,8 @@ Example:
 
 ```markdown
 ---
-"open-game-rules": minor
-"game-client": patch
+"my-first-app": minor
+"my-third-app": patch
 ---
 Added the new scoring mechanic for overtime.
 ```
