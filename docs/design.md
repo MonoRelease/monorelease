@@ -53,7 +53,8 @@ Releasing an application simply means MonoRelease calculates the new version and
 These are markdown files with YAML frontmatter.
 
 Example:
-```
+
+```markdown
 ---
 "open-game-rules": minor
 "game-client": patch
@@ -68,4 +69,3 @@ This would make it such that creating a train doesn't necessarily mark all appli
 However, how it should be handled if a single change file affects multiple applications and one or more shouldn't be included in the train is unclear.
 Perhaps the solution is simply to return an error, and have the user manually split the change file or include the application manually.
 One solution might also be to simply include all that application's change files as well then (if the user approves), but I think this is a bad approach compared to simply throwing an error because this approach might lead to accidental releases.
-
