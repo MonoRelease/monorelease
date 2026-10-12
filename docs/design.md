@@ -69,3 +69,8 @@ This would make it such that creating a wave doesn't necessarily mark all projec
 However, how it should be handled if a single change file affects multiple projects and one or more shouldn't be included in the wave is unclear.
 Perhaps the solution is simply to return an error, and have the user manually split the change file or include the project manually.
 One solution might also be to simply include all that project's change files as well then (if the user approves), but I think this is a bad approach compared to simply throwing an error because this approach might lead to accidental releases.
+
+Another possible future addition is to have a tagging system for projects.
+You could, for example, tag all projects in your repo that uses a common component.
+Then, when you are creating a change, you can define that the change is a patch update on that tag,
+such that all projects with that tag gets a release.
