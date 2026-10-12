@@ -10,8 +10,8 @@ pub enum Command {
     Version,
     /// Initialise MonoRelease in the current directory.
     Init,
-    /// Train commands.
-    Trains,
+    /// Wave commands.
+    Waves,
     /// Change commands.
     Changes,
 }
