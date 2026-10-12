@@ -10,10 +10,12 @@ pub enum Command {
     Version,
     /// Initialise MonoRelease in the current directory.
     Init,
-    /// Wave commands.
-    Waves,
     /// Change commands.
     Changes,
+    /// Wave commands.
+    Waves,
+    /// Project commands.
+    Projects,
 }
 
 pub struct Cli;
