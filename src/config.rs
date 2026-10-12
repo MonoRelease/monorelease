@@ -11,6 +11,7 @@ pub enum LogLevel {
 #[derive(Debug, Deserialize)]
 pub struct Config {
     config_version: u16,
+    base_path: String,
     #[serde(default)]
     log_level: LogLevel,
 }
