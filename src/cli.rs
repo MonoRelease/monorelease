@@ -1,3 +1,5 @@
+use anyhow::Result;
+
 #[derive(clap::Parser, Debug, Clone)]
 pub struct Args {
     #[command(subcommand)]
@@ -74,8 +76,27 @@ pub enum ChangelogCommand {
 
 pub struct Cli;
 
+const VERSION: &str = env!("CARGO_PKG_VERSION");
+
 impl Cli {
-    pub fn run(args: Args) {
-        todo!()
+    pub fn run(args: Args) -> Result<()> {
+        match args.command {
+            Command::Version => {
+                println!("{VERSION}");
+                Ok(())
+            }
+            Command::Init => monorelease::init::init(),
+            Command::Change => todo!(),
+            Command::Wave => todo!(),
+            Command::Project { command } => match command {
+                ProjectCommand::Bump { project, dry } => todo!(),
+                ProjectCommand::Revert { project } => todo!(),
+            },
+            Command::Changelog { command } => match command {
+                ChangelogCommand::Exact { project, version } => todo!(),
+                ChangelogCommand::Range { project, from, to } => todo!(),
+                ChangelogCommand::Full { project } => todo!(),
+            },
+        }
     }
 }

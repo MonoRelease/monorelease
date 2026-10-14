@@ -10,8 +10,9 @@ pub enum LogLevel {
 
 #[derive(Debug, Deserialize)]
 pub struct Config {
+    #[allow(clippy::struct_field_names, unused)]
     config_version: u16,
-    base_path: String,
-    #[serde(default)]
-    log_level: LogLevel,
+    // base_path: String,
+    // #[serde(default)]
+    // log_level: LogLevel,
 }
