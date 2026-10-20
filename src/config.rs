@@ -1,6 +1,6 @@
 use std::{fs::File, io::BufReader, path::PathBuf};
 
-use anyhow::Result;
+use anyhow::{Context, Result};
 use serde::Deserialize;
 
 pub const CONFIG_PATH: &str = "monorelease.yaml";
@@ -27,7 +27,9 @@ pub struct Config {
 
 impl Config {
     pub fn load() -> Result<Self> {
-        let file = File::open(CONFIG_PATH)?;
+        let file = File::open(CONFIG_PATH).context(format!(
+            "could not find main configuration file '{CONFIG_PATH}'"
+        ))?;
         let reader = BufReader::new(file);
         let mut config: Self = serde_yaml::from_reader(reader)?;
 
