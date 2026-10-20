@@ -1,8 +1,9 @@
-use std::path::PathBuf;
+use std::{fs::File, io::BufReader, path::PathBuf};
 
 use anyhow::Result;
 use serde::Deserialize;
 
+pub const CONFIG_PATH: &str = "monorelease.yaml";
 pub const NEXT_DIR_PATH: &str = "next";
 pub const WAVE_DIR_PATH: &str = "waves";
 pub const PROJECTS_DIR_PATH: &str = "projects";
@@ -26,7 +27,12 @@ pub struct Config {
 
 impl Config {
     pub fn load() -> Result<Self> {
-        // TODO: Convert the base path to an absolute path
-        todo!()
+        let file = File::open(CONFIG_PATH)?;
+        let reader = BufReader::new(file);
+        let mut config: Self = serde_yaml::from_reader(reader)?;
+
+        config.base_path = std::path::absolute(config.base_path)?;
+
+        Ok(config)
     }
 }
