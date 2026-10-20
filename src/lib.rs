@@ -1,6 +1,7 @@
 pub mod config;
 pub mod init;
 
+#[derive(Debug, Clone)]
 pub struct MonoRelease;
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
