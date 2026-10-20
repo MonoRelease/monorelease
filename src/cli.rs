@@ -1,4 +1,5 @@
 use anyhow::Result;
+use monorelease::MonoRelease;
 
 #[derive(clap::Parser, Debug, Clone)]
 pub struct Args {
@@ -76,16 +77,16 @@ pub enum ChangelogCommand {
 
 pub struct Cli;
 
-const VERSION: &str = env!("CARGO_PKG_VERSION");
-
 impl Cli {
+    #[allow(clippy::todo, unused)]
     pub fn run(args: Args) -> Result<()> {
+        let monorelease = MonoRelease::new();
         match args.command {
             Command::Version => {
-                println!("{VERSION}");
+                println!("{}", MonoRelease::version());
                 Ok(())
             }
-            Command::Init => monorelease::init::init(),
+            Command::Init => monorelease.init(),
             Command::Change => todo!(),
             Command::Wave => todo!(),
             Command::Project { command } => match command {
