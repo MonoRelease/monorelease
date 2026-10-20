@@ -4,6 +4,11 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+anyhow = "=1.0.104"
+clap = { version = "=4.6.7", features = ["derive"] }
+config = { version = "=0.15.27", features = ["yaml"] }
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_yaml = "=0.9.34"
 
 [lints.clippy]
 # UM, ACTUALLY
@@ -24,3 +29,5 @@ panic_in_result_fn = "deny"
 panic = "deny"
 exit = "deny"
 as_conversions = "deny"
+# ALLOW THE FOLLOWING (BECAUSE THEY ARE TOO ANNOYING)
+missing_errors_doc = "allow" # This just leads to having an error section that says something along the lines of "This function returns an error if an error occurs"
