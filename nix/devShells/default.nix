@@ -9,9 +9,7 @@
     inherit (shared.core) nativeBuildInputs buildInputs env;
   };
 
-  docs = pkgs.mkShell {
-    nativeBuildInputs = with pkgs; [
-      pnpm
-    ];
+  website = pkgs.mkShell {
+    inherit (shared.website) nativeBuildInputs;
   };
 }

@@ -44,10 +44,62 @@ let
         --set LD_LIBRARY_PATH "${shared.core.env.LD_LIBRARY_PATH}"
     '';
   };
+
+  mkWebDerivation =
+    { name, command }:
+    pkgs.stdenv.mkDerivation {
+      inherit name;
+
+      nativeBuildInputs = shared.website.nativeBuildInputs ++ [
+        pkgs.makeWrapper
+      ];
+
+      dontUnpack = true;
+
+      installPhase = ''
+        mkdir -p $out/bin
+
+        cat > $out/bin/${name}-raw <<'EOF'
+        #!/usr/bin/env bash
+        set -euo pipefail
+
+        cd website
+        pnpm install
+        ${command}
+
+        EOF
+
+        chmod +x $out/bin/${name}-raw
+
+        makeWrapper $out/bin/${name}-raw $out/bin/${name} \
+          --prefix PATH : "${pkgs.lib.makeBinPath shared.website.nativeBuildInputs}" \
+          --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH" \
+      '';
+    };
+
+  webStart = mkWebDerivation {
+    name = "web-start";
+    command = "pnpm docusaurus start";
+  };
+
+  webBuild = mkWebDerivation {
+    name = "web-build";
+    command = "pnpm docusaurus build";
+  };
 in
 {
   ci = {
     type = "app";
     program = "${ci}/bin/ci";
+  };
+
+  webStart = {
+    type = "app";
+    program = "${webStart}/bin/web-start";
+  };
+
+  webBuild = {
+    type = "app";
+    program = "${webBuild}/bin/web-build";
   };
 }
