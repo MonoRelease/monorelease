@@ -1,4 +1,5 @@
 {
+  pkgs,
   git-hooks,
   system,
   rustToolchain,
@@ -50,5 +51,11 @@
     env = {
       LD_LIBRARY_PATH = "";
     };
+  };
+
+  website = {
+    nativeBuildInputs = with pkgs; [
+      pnpm
+    ];
   };
 }

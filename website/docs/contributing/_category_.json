@@ -1,0 +1,8 @@
+{
+  "label": "Contributing",
+  "position": 100000,
+  "link": {
+    "type": "generated-index",
+    "description": "Documentation aimed at contributors of MonoRelease, detailing the internal systems of MonoRelease and other relevant information for contributing to MonoRelease."
+  }
+}
