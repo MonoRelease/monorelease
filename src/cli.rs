@@ -1,5 +1,5 @@
 use anyhow::Result;
-use monorelease::MonoRelease;
+use monorelease::{MonoRelease, config::Config};
 
 #[derive(clap::Parser, Debug, Clone)]
 pub struct Args {
@@ -80,13 +80,12 @@ pub struct Cli;
 impl Cli {
     #[allow(clippy::todo, unused)]
     pub fn run(args: Args) -> Result<()> {
-        let monorelease = MonoRelease::new();
         match args.command {
             Command::Version => {
                 println!("{}", MonoRelease::version());
                 Ok(())
             }
-            Command::Init => monorelease.init(),
+            Command::Init => todo!(),
             Command::Change => todo!(),
             Command::Wave => todo!(),
             Command::Project { command } => match command {

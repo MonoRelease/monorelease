@@ -1,25 +1,23 @@
+use crate::config::{CONFIG_PATH, Config};
+
 pub mod config;
 pub mod init;
 
 #[derive(Debug, Clone)]
-pub struct MonoRelease;
+pub struct MonoRelease {
+    config: Config,
+}
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 impl MonoRelease {
     #[must_use]
-    pub const fn new() -> Self {
-        Self {}
+    pub const fn new(config: Config) -> Self {
+        Self { config }
     }
 
     #[must_use]
     pub fn version() -> String {
         VERSION.to_string()
-    }
-}
-
-impl Default for MonoRelease {
-    fn default() -> Self {
-        Self::new()
     }
 }

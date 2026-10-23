@@ -31,3 +31,6 @@ exit = "deny"
 as_conversions = "deny"
 # ALLOW THE FOLLOWING (BECAUSE THEY ARE TOO ANNOYING)
 missing_errors_doc = "allow" # This just leads to having an error section that says something along the lines of "This function returns an error if an error occurs"
+
+[dev-dependencies]
+tempfile = "=3.27.0"
