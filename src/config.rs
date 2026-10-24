@@ -30,20 +30,18 @@ impl Default for Config {
         Self {
             config_version: 1,
             base_path: DEFAULT_BASE_PATH.into(),
-            log_level: Default::default(),
+            log_level: LogLevel::default(),
         }
     }
 }
 
 impl Config {
-    #[must_use]
     pub fn load_from_file(path: &Path) -> Result<Self> {
         let file = File::open(path).context(format!("could not find file '{}'", path.display()))?;
         let reader = BufReader::new(file);
         Ok(serde_yaml::from_reader(reader)?)
     }
 
-    #[must_use]
     pub fn load_from_dir(dir: &Path) -> Result<Self> {
         Self::load_from_file(&dir.join(CONFIG_PATH))
     }
@@ -57,8 +55,8 @@ impl Config {
                 "config file does not exist - creating default at {}",
                 config_path.display()
             );
-            let config = Config::default();
-            let file = File::create(config_path.clone())?;
+            let config = Self::default();
+            let file = File::create(config_path)?;
             serde_yaml::to_writer(file, &config)?;
         }
         Ok(())

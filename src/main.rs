@@ -23,7 +23,7 @@ fn main() {
     let log = Log::init(&LogLevel::default());
 
     let args = cli::Args::parse();
-    let result = Cli::run(args, log);
+    let result = Cli::run(args, &log);
 
     if let Err(err) = result {
         error!("{err}");

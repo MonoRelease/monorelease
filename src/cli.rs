@@ -81,7 +81,7 @@ pub struct Cli;
 
 impl Cli {
     #[allow(clippy::todo, unused)]
-    pub fn run(args: Args, log: Log) -> Result<()> {
+    pub fn run(args: Args, log: &Log) -> Result<()> {
         match args.command {
             Command::Version => {
                 println!("{}", MonoRelease::version());

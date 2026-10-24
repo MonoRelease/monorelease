@@ -20,6 +20,7 @@ pub struct Log {
 }
 
 impl Log {
+    #[must_use]
     pub fn init(log_level: &LogLevel) -> Self {
         let level_filter: LevelFilter = log_level.into();
         let filter = EnvFilter::builder()
@@ -59,11 +60,11 @@ impl Log {
 impl From<&LogLevel> for LevelFilter {
     fn from(level: &LogLevel) -> Self {
         match level {
-            LogLevel::Trace => LevelFilter::TRACE,
-            LogLevel::Debug => LevelFilter::DEBUG,
-            LogLevel::Info => LevelFilter::INFO,
-            LogLevel::Warn => LevelFilter::WARN,
-            LogLevel::Error => LevelFilter::ERROR,
+            LogLevel::Trace => Self::TRACE,
+            LogLevel::Debug => Self::DEBUG,
+            LogLevel::Info => Self::INFO,
+            LogLevel::Warn => Self::WARN,
+            LogLevel::Error => Self::ERROR,
         }
     }
 }
