@@ -1,5 +1,7 @@
+use std::env;
+
 use anyhow::Result;
-use monorelease::{MonoRelease, config::Config};
+use monorelease::MonoRelease;
 
 #[derive(clap::Parser, Debug, Clone)]
 pub struct Args {
@@ -85,7 +87,7 @@ impl Cli {
                 println!("{}", MonoRelease::version());
                 Ok(())
             }
-            Command::Init => todo!(),
+            Command::Init => MonoRelease::init(&env::current_dir()?),
             Command::Change => todo!(),
             Command::Wave => todo!(),
             Command::Project { command } => match command {

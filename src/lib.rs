@@ -1,4 +1,4 @@
-use crate::config::{CONFIG_PATH, Config};
+use crate::config::Config;
 
 pub mod config;
 pub mod init;

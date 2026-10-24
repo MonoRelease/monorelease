@@ -8,9 +8,11 @@ use anyhow::{Context, Result};
 use serde::{Deserialize, Serialize};
 
 pub const CONFIG_PATH: &str = "monorelease.yaml";
-pub const NEXT_DIR_PATH: &str = "next";
-pub const WAVE_DIR_PATH: &str = "waves";
-pub const PROJECTS_DIR_PATH: &str = "projects";
+pub const NEXT_DIR_PATH: &str = "next/";
+pub const WAVE_DIR_PATH: &str = "waves/";
+pub const PROJECTS_DIR_PATH: &str = "projects/";
+
+pub const DEFAULT_BASE_PATH: &str = "releases/";
 
 #[derive(Debug, Deserialize, Serialize, Default)]
 pub enum LogLevel {
@@ -20,7 +22,7 @@ pub enum LogLevel {
     Error,
 }
 
-#[derive(Debug, Deserialize, Serialize, Clone, Default)]
+#[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Config {
     #[allow(clippy::struct_field_names, unused)]
     pub config_version: u16,
@@ -29,14 +31,19 @@ pub struct Config {
     // log_level: LogLevel,
 }
 
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            config_version: 1,
+            base_path: DEFAULT_BASE_PATH.into(),
+        }
+    }
+}
+
 impl Config {
     pub fn load(path: &Path) -> Result<Self> {
         let file = File::open(path).context(format!("could not find file '{}'", path.display()))?;
         let reader = BufReader::new(file);
-        let mut config: Self = serde_yaml::from_reader(reader)?;
-
-        config.base_path = std::path::absolute(config.base_path)?;
-
-        Ok(config)
+        Ok(serde_yaml::from_reader(reader)?)
     }
 }
