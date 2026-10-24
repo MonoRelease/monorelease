@@ -2,6 +2,9 @@ use crate::config::Config;
 
 pub mod config;
 pub mod init;
+pub mod logging;
+#[cfg(test)]
+pub(crate) mod testing;
 
 #[derive(Debug, Clone)]
 pub struct MonoRelease {
