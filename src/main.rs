@@ -1,6 +1,10 @@
 use clap::Parser;
 use config::{Config, ConfigError, Environment, File};
-use monorelease::config::Config as MonoReleaseConfig;
+use monorelease::{
+    config::Config as MonoReleaseConfig,
+    logging::{Log, LogLevel},
+};
+use tracing::error;
 
 use crate::cli::Cli;
 use anyhow::Result;
@@ -15,7 +19,14 @@ pub fn load_config() -> Result<MonoReleaseConfig, ConfigError> {
     builder.build()?.try_deserialize()
 }
 
-fn main() -> Result<()> {
+fn main() {
+    let log = Log::init(&LogLevel::default());
+
     let args = cli::Args::parse();
-    Cli::run(args)
+    let result = Cli::run(args, &log);
+
+    if let Err(err) = result {
+        error!("{err}");
+        std::process::exit(1);
+    }
 }

@@ -1,5 +1,7 @@
+use std::env;
+
 use anyhow::Result;
-use monorelease::MonoRelease;
+use monorelease::{MonoRelease, config::Config, logging::Log};
 
 #[derive(clap::Parser, Debug, Clone)]
 pub struct Args {
@@ -79,14 +81,22 @@ pub struct Cli;
 
 impl Cli {
     #[allow(clippy::todo, unused)]
-    pub fn run(args: Args) -> Result<()> {
-        let monorelease = MonoRelease::new();
+    pub fn run(args: Args, log: &Log) -> Result<()> {
         match args.command {
             Command::Version => {
                 println!("{}", MonoRelease::version());
                 Ok(())
             }
-            Command::Init => monorelease.init(),
+            Command::Init => {
+                let dir = env::current_dir()?;
+                Config::ensure_file_exists_in_dir(&dir);
+
+                let config = Config::load_from_dir(&dir)?;
+                log.set_log_level(&config.log_level);
+                let monorelease = MonoRelease::new(config);
+
+                monorelease.init(&env::current_dir()?)
+            }
             Command::Change => todo!(),
             Command::Wave => todo!(),
             Command::Project { command } => match command {

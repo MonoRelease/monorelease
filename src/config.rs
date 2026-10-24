@@ -1,40 +1,64 @@
-use std::{fs::File, io::BufReader, path::PathBuf};
+use std::{
+    fs::File,
+    io::BufReader,
+    path::{Path, PathBuf},
+};
 
 use anyhow::{Context, Result};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
+use tracing::info;
+
+use crate::logging::LogLevel;
 
 pub const CONFIG_PATH: &str = "monorelease.yaml";
-pub const NEXT_DIR_PATH: &str = "next";
-pub const WAVE_DIR_PATH: &str = "waves";
-pub const PROJECTS_DIR_PATH: &str = "projects";
+pub const NEXT_DIR_PATH: &str = "next/";
+pub const WAVE_DIR_PATH: &str = "waves/";
+pub const PROJECTS_DIR_PATH: &str = "projects/";
 
-#[derive(Debug, Deserialize, Default)]
-pub enum LogLevel {
-    #[default]
-    Info,
-    Warning,
-    Error,
-}
+pub const DEFAULT_BASE_PATH: &str = "releases/";
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Config {
     #[allow(clippy::struct_field_names, unused)]
     pub config_version: u16,
     pub base_path: PathBuf,
-    // #[serde(default)]
-    // log_level: LogLevel,
+    pub log_level: LogLevel,
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            config_version: 1,
+            base_path: DEFAULT_BASE_PATH.into(),
+            log_level: LogLevel::default(),
+        }
+    }
 }
 
 impl Config {
-    pub fn load() -> Result<Self> {
-        let file = File::open(CONFIG_PATH).context(format!(
-            "could not find main configuration file '{CONFIG_PATH}'"
-        ))?;
+    pub fn load_from_file(path: &Path) -> Result<Self> {
+        let file = File::open(path).context(format!("could not find file '{}'", path.display()))?;
         let reader = BufReader::new(file);
-        let mut config: Self = serde_yaml::from_reader(reader)?;
+        Ok(serde_yaml::from_reader(reader)?)
+    }
 
-        config.base_path = std::path::absolute(config.base_path)?;
+    pub fn load_from_dir(dir: &Path) -> Result<Self> {
+        Self::load_from_file(&dir.join(CONFIG_PATH))
+    }
 
-        Ok(config)
+    pub fn ensure_file_exists_in_dir(dir: &Path) -> Result<()> {
+        let config_path = dir.join(CONFIG_PATH);
+        if config_path.exists() {
+            info!("existing config file detected at {}", config_path.display());
+        } else {
+            info!(
+                "config file does not exist - creating default at {}",
+                config_path.display()
+            );
+            let config = Self::default();
+            let file = File::create(config_path)?;
+            serde_yaml::to_writer(file, &config)?;
+        }
+        Ok(())
     }
 }
