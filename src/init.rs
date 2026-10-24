@@ -10,7 +10,6 @@ use crate::MonoRelease;
 
 impl MonoRelease {
     /// Initialises the folder structure.
-    #[allow(clippy::todo)]
     pub fn init(&self, dir: &Path) -> Result<()> {
         info!("initialising at {}", dir.display());
 
